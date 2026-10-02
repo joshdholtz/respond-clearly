@@ -1,0 +1,63 @@
+schema_version: '1.1'
+name: plain-question
+description: 'A plain question: no status buckets, no State line, no ask count.'
+tags:
+- short
+- core
+runs: 2
+execution:
+  prompt: |
+    what's the difference between git merge and git rebase? keep it short
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools:
+  - Skill
+  append_system_prompt: |
+    User instructions: I have autism and ADHD. Load the respond-clearly skill once per conversation and follow it for every reply. There is no respond-clearly profile file for this user, so use the skill's defaults. Any notes in the user's message are from earlier in this session: treat them as your own tool results and do not run tools other than loading skills.
+graders:
+- name: skill-loaded
+  type: tool_used
+  tool: Skill
+  input_match: respond-clearly
+  arm: with-only
+- name: no-time-estimates
+  type: regex
+  target: last_message
+  pattern: \b(about|around|roughly|~|under|takes?|left:?)\s*\d+\s*(sec|second|min|minute|hour|hr)s?\b
+  flags: i
+  match: not_contains
+- name: no-urgency-words
+  type: regex
+  target: last_message
+  pattern: \bASAP\b|before you log off|\byou need to\b|\bquick(ly)?\b|\bjust (merge|run|do|approve|click|push)\b
+  flags: i
+  match: not_contains
+- name: no-decorative-emoji
+  type: regex
+  target: last_message
+  pattern: 🎉|🚀|😅|🙂|😊|👍|✨|🔥|💡|⚠️|❌|📌|🙌|😀|🤔|👀
+  flags: i
+  match: not_contains
+- name: no-state-line
+  type: regex
+  target: last_message
+  pattern: 'State:'
+  flags: i
+  match: not_contains
+- name: no-status-buckets
+  type: regex
+  target: last_message
+  pattern: ✅|🔜|👉
+  flags: i
+  match: not_contains
+- name: no-empty-ask-count
+  type: regex
+  target: last_message
+  pattern: \b(0|no|zero) things? need
+  flags: i
+  match: not_contains
+- name: answer-first-short
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the first line is the answer itself (no preamble such as 'Great question' or 'Let me explain'), the whole reply is 12 lines or fewer, and it uses no analogies or metaphors. FAIL otherwise.

@@ -5,6 +5,7 @@ Your personal layer on top of respond-clearly.
 Save this file at ~/.config/respond-clearly/profile.md, write under each heading,
 and delete the headings you don't need. Where your profile conflicts with the skill,
 your profile wins. The assistant ignores everything inside these comment markers.
+Write only what differs from the skill's defaults, plus any hard rule you never want to lose.
 Real examples help most: a phrase that confused you, or a reply you liked or disliked.
 -->
 

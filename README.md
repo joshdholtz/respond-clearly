@@ -78,13 +78,32 @@ The rules in the skill are defaults. Your profile overrides them.
 
 The profile lives outside the skill folder, so updating the skill never overwrites it.
 
-## Use it on every reply (optional)
+## Use it on every reply (recommended)
 
-A skill loads when the model decides it's relevant. To use it for every conversation, add this line to `~/.claude/CLAUDE.md` (Claude Code) or `~/.codex/AGENTS.md` (Codex):
+A skill loads only when the model decides it's relevant, and models often skip skills for short or simple messages. For reliable results, add this line to `~/.claude/CLAUDE.md` (Claude Code) or `~/.codex/AGENTS.md` (Codex):
 
 ```markdown
 Load the respond-clearly skill once per conversation and follow it for every reply.
 ```
+
+## Tests
+
+`evals/` holds 5 test cases (a status report, a root-cause explanation, meeting notes to to-dos, a plain question, and a how-to question). Each one checks the reply automatically: no time estimates, no urgency words, the right shape for the kind of reply, and so on.
+
+```bash
+claude plugin eval . --trust-plugin
+```
+
+Add `--model <model>` to test a specific model. The tests run without your CLAUDE.md or profile, so they check the default rules.
+
+## Sources
+
+The rules come from the author's own needs, checked against research and neurodivergent-led writing. Needs vary, which is why every rule is a default your profile can change.
+
+- Demand avoidance and wording: [National Autistic Society](https://www.autism.org.uk/advice-and-guidance/behaviour/demand-avoidance), [Neurodivergent Insights](https://neurodivergentinsights.com/pda-or-demand-avoidance/), [Johnson & Saunderson 2023](https://www.pdasociety.org.uk/resources/examining-the-relationship-between-anxiety-and-pathological-demand-avoidance-in-adults-a-mixed-methods-approach/)
+- Direct statements instead of hints: [Linda Murphy, "More Direct"](https://www.declarativelanguage.com/sunday-snippets-of-support/more-direct), [PDA North America](https://pdanorthamerica.org/wp-content/uploads/2024/01/Declarative-Language-PDA.pdf)
+- ADHD time perception: [meta-analysis summary](https://www.adhdevidence.org/blog/time-blindness-found-to-be-a-consistent-feature-of-adhd)
+- Neurodivergent developers and pressure: [Newman et al. 2025](https://kaianew.github.io/GetMeInTheGroove.pdf), [Gama et al. 2024](https://arxiv.org/html/2411.13950)
 
 ## Credits
 

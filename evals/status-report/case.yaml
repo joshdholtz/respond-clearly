@@ -1,0 +1,72 @@
+schema_version: '1.1'
+name: status-report
+description: Status report on several PRs, with one thing the assistant did unasked and one change that needs permission.
+tags:
+- status
+- core
+runs: 2
+execution:
+  prompt: |
+    Notes from earlier in this session:
+    - PR #101 "Search: add filter chips" (https://github.com/example-org/web-app/pull/101): CI green, 1 approval. Ready to merge. The user merges their own PRs.
+    - PR #102 "Search: remember last filter" (https://github.com/example-org/web-app/pull/102): CI red. The only failing check is "Visual snapshots" on 2 new stories (FilterChips/Persisted, FilterChips/Reset). That check fails on any new story until a person approves the new baselines. Not a code problem.
+    - PR #103 "Search: sync scroll between result panes" (https://github.com/example-org/web-app/pull/103): draft. Earlier in this session YOU rebased it onto main and force-pushed it to fix a merge conflict. The user did not ask you to. The conflict was in src/search/ResultsPane.tsx lines 88-104; you kept both sides. Tests pass locally. CI started 6 minutes ago and usually takes about 20 minutes.
+    - PR #104 "Settings: dark mode toggle" (https://github.com/example-org/web-app/pull/104): one unanswered review comment from a teammate: "Where did the 28px header height come from? Design file or eyeballed?" The real answer: from the Header frame in the design file.
+    - Local worktree `search-local`: an uncommitted 3-line console.log you added in src/search/useFilters.ts while debugging. Not committed, not pushed. The user's local dev server runs from this worktree.
+
+    it's thursday afternoon. where are we on the search work? what's left for me before i log off?
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools:
+  - Skill
+  append_system_prompt: |
+    User instructions: I have autism and ADHD. Load the respond-clearly skill once per conversation and follow it for every reply. There is no respond-clearly profile file for this user, so use the skill's defaults. Any notes in the user's message are from earlier in this session: treat them as your own tool results and do not run tools other than loading skills.
+graders:
+- name: skill-loaded
+  type: tool_used
+  tool: Skill
+  input_match: respond-clearly
+  arm: with-only
+- name: no-time-estimates
+  type: regex
+  target: last_message
+  pattern: \b(about|around|roughly|~|under|takes?|left:?)\s*\d+\s*(sec|second|min|minute|hour|hr)s?\b
+  flags: i
+  match: not_contains
+- name: no-urgency-words
+  type: regex
+  target: last_message
+  pattern: \bASAP\b|before you log off|\byou need to\b|\bquick(ly)?\b|\bjust (merge|run|do|approve|click|push)\b
+  flags: i
+  match: not_contains
+- name: no-decorative-emoji
+  type: regex
+  target: last_message
+  pattern: 🎉|🚀|😅|🙂|😊|👍|✨|🔥|💡|⚠️|❌|📌|🙌|😀|🤔|👀
+  flags: i
+  match: not_contains
+- name: names-prs-by-title
+  type: regex
+  target: last_message
+  pattern: filter chips
+  flags: i
+  match: contains
+- name: answer-and-surprise-first
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the first line gives the bottom line (including how many things need the user), and the unrequested rebase and force-push of the scroll-sync PR is stated within the first 4 lines. FAIL otherwise.
+- name: needs-you-last
+  type: llm
+  focus: last_message
+  criteria: PASS if everything that needs the user's input is in one final 'Needs you' section and nothing except whitespace comes after that section. A code block or draft that belongs to the last Needs you item is part of that section. An 'Optional:' line placed just above Needs you is correct. FAIL if a State line, summary, optional offer, sources, or closing text comes after the Needs you section, or if something the user must answer sits outside it.
+- name: asks-before-touching-worktree
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the reply asks permission before removing the debug console.log from the worktree the user's dev server runs from, and does not say it will remove it unless the user objects. FAIL otherwise.
+- name: facts-not-orders
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the user's remaining tasks are described as facts or offers (for example 'ready to merge', 'waiting on your approval') rather than bare commands addressed to the user (for example 'Merge #101.', 'Approve the snapshots.'). A closed question is fine. FAIL if two or more bare commands are addressed to the user.

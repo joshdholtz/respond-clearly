@@ -1,0 +1,77 @@
+schema_version: '1.1'
+name: meeting-todos
+description: Turning meeting notes into the user's own to-dos without inventing precision.
+tags:
+- notes
+- non-code
+- core
+runs: 2
+execution:
+  prompt: |
+    Notes from today's team sync (Wednesday, Sept 30, 2026), auto-generated:
+    - Mobile app: build 4.12 went out Monday. A teammate owns the next release, targeting Oct 7.
+    - CLI: a teammate asked the user to review the "pull command" PR "sometime this week" (https://github.com/example-org/cli/pull/412).
+    - Docs: search results are "kind of bad". The manager said "someone should probably look at this soon." No owner assigned.
+    - Settings: the manager asked the user to write a short doc on how the header measurements were made, for the design team, by Friday Oct 2.
+    - Team: offsite planning. Everyone fills in the availability form by Oct 3. The link is pinned in #team.
+    - Hiring: a teammate asked if the user can do a technical interview on Oct 6 at 2pm PT. The user said "probably, let me check my calendar."
+    - The user mentioned they're on call next week, starting Oct 5.
+
+    can you turn my notes from team sync into what i actually have to do? i zoned out for half of it lol
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools:
+  - Skill
+  append_system_prompt: |
+    User instructions: I have autism and ADHD. Load the respond-clearly skill once per conversation and follow it for every reply. There is no respond-clearly profile file for this user, so use the skill's defaults. Any notes in the user's message are from earlier in this session: treat them as your own tool results and do not run tools other than loading skills.
+graders:
+- name: skill-loaded
+  type: tool_used
+  tool: Skill
+  input_match: respond-clearly
+  arm: with-only
+- name: no-time-estimates
+  type: regex
+  target: last_message
+  pattern: \b(about|around|roughly|~|under|takes?|left:?)\s*\d+\s*(sec|second|min|minute|hour|hr)s?\b
+  flags: i
+  match: not_contains
+- name: no-urgency-words
+  type: regex
+  target: last_message
+  pattern: \bASAP\b|before you log off|\byou need to\b|\bquick(ly)?\b|\bjust (merge|run|do|approve|click|push)\b
+  flags: i
+  match: not_contains
+- name: no-decorative-emoji
+  type: regex
+  target: last_message
+  pattern: 🎉|🚀|😅|🙂|😊|👍|✨|🔥|💡|⚠️|❌|📌|🙌|😀|🤔|👀
+  flags: i
+  match: not_contains
+- name: no-invented-date
+  type: regex
+  target: last_message
+  pattern: reading (that|this|it) as|i'?ll assume|assuming
+  flags: i
+  match: not_contains
+- name: keeps-real-deadline
+  type: regex
+  target: last_message
+  pattern: oct(ober)?\.? 2
+  flags: i
+  match: contains
+- name: only-their-items
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the reply separates the user's own to-dos (header doc, PR review, availability form, interview reply) from items that are not theirs (mobile release, unowned docs search), and marks the docs-search item as not assigned to anyone. FAIL otherwise.
+- name: no-invented-precision
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the PR review deadline is reported as 'sometime this week' or 'no date given' rather than a specific date the notes never gave. FAIL if a specific date is invented for it.
+- name: states-selection-rule
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the reply states the rule it used to decide which items are the user's (for example 'an item is yours if someone asked you directly or it's a whole-team task'). FAIL otherwise.

@@ -1,0 +1,79 @@
+schema_version: '1.1'
+name: root-cause
+description: Explaining a bug's root cause so the user can repeat it to their team.
+tags:
+- explain
+- core
+runs: 2
+execution:
+  prompt: |
+    Notes from earlier in this session:
+    - Symptom: the admin checkout preview shows a blank white page on tablets (width 600px and up). Phones are fine. It started after the responsive-layout change merged on Sept 24.
+    - Cause: resolveLayout() in src/checkout/layout.ts:41 falls back with `tablet ?? undefined` instead of `tablet ?? base`, so pages without a tablet override get no layout.
+    - Effect: the page component gets an undefined layout and returns null, so nothing renders. Nothing throws, so error monitoring recorded nothing.
+    - How found: reproduced it in Storybook with the tablet frame; added logging in the probe story; bisected the 3 commits between Sept 22 and Sept 25.
+    - Scope: 1,137 of 1,210 published checkout pages (94%) have no tablet override. Only the admin preview is affected; the live site uses server-rendered layouts.
+    - Fix: one-line change to `tablet ?? base` plus a unit test, on branch fix/tablet-layout-fallback. Committed, not pushed, no PR yet.
+
+    ok so why was the checkout preview blank on tablets? i need to explain this to the team tomorrow and i dont want to sound like magic
+  max_turns: 6
+  timeout_seconds: 300
+  allowed_tools:
+  - Skill
+  append_system_prompt: |
+    User instructions: I have autism and ADHD. Load the respond-clearly skill once per conversation and follow it for every reply. There is no respond-clearly profile file for this user, so use the skill's defaults. Any notes in the user's message are from earlier in this session: treat them as your own tool results and do not run tools other than loading skills.
+graders:
+- name: skill-loaded
+  type: tool_used
+  tool: Skill
+  input_match: respond-clearly
+  arm: with-only
+- name: no-time-estimates
+  type: regex
+  target: last_message
+  pattern: \b(about|around|roughly|~|under|takes?|left:?)\s*\d+\s*(sec|second|min|minute|hour|hr)s?\b
+  flags: i
+  match: not_contains
+- name: no-urgency-words
+  type: regex
+  target: last_message
+  pattern: \bASAP\b|before you log off|\byou need to\b|\bquick(ly)?\b|\bjust (merge|run|do|approve|click|push)\b
+  flags: i
+  match: not_contains
+- name: no-decorative-emoji
+  type: regex
+  target: last_message
+  pattern: 🎉|🚀|😅|🙂|😊|👍|✨|🔥|💡|⚠️|❌|📌|🙌|😀|🤔|👀
+  flags: i
+  match: not_contains
+- name: exact-scale
+  type: regex
+  target: last_message
+  pattern: 1,137|94\s?%
+  flags: i
+  match: contains
+- name: no-unexplained-internal-label
+  type: regex
+  target: last_message
+  pattern: probe
+  flags: i
+  match: not_contains
+- name: root-cause-table
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the reply contains a table covering at least what broke, why, and how it was found. FAIL otherwise.
+- name: repeatable-explanation
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the reply includes a plain-language explanation the user could paste or say to their team, in its own labeled block. FAIL otherwise.
+- name: exact-state
+  type: llm
+  focus: last_message
+  criteria: |
+    PASS if the reply states the fix's state exactly: committed, not pushed, and no PR yet. FAIL otherwise.
+- name: literal-language
+  type: llm
+  focus: last_message
+  criteria: PASS if the reply uses no analogies, metaphors, or idioms that a literal reader could misread (for example 'think of it like', 'a perfect storm', 'low-hanging fruit', 'the canary in the coal mine'). Ordinary technical wording such as 'fall back', 'catch an error', 'root cause', or 'monitoring saw nothing' is fine. FAIL only for real analogies or idioms.
