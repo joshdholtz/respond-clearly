@@ -1,0 +1,27 @@
+{
+  "name": "respond-clearly",
+  "version": "0.4.1",
+  "description": "Replies shaped for readers with ADHD, autism, or both: answer first, literal wording, exact state, no surprises. Personalize it with your own profile.",
+  "author": {
+    "name": "Josh Holtz",
+    "url": "https://github.com/joshdholtz"
+  },
+  "homepage": "https://github.com/joshdholtz/respond-clearly",
+  "repository": "https://github.com/joshdholtz/respond-clearly",
+  "license": "MIT",
+  "keywords": ["adhd", "autism", "neurodivergent", "output-style", "skills", "codex"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Respond Clearly",
+    "shortDescription": "Replies for readers with ADHD, autism, or both",
+    "longDescription": "Shapes replies so they can be skimmed, taken literally, and acted on: answer first, short sections, exact numbers and state, no surprises, one next step. Reads your personal profile from ~/.config/respond-clearly/profile.md.",
+    "developerName": "Josh Holtz",
+    "category": "Productivity",
+    "capabilities": ["Instructions"],
+    "websiteURL": "https://github.com/joshdholtz/respond-clearly",
+    "defaultPrompt": [
+      "Use respond-clearly for this task.",
+      "Give me the answer first and the one thing I need to do."
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
+  "name": "respond-clearly",
+  "description": "Replies shaped for readers with ADHD, autism, or both.",
+  "owner": {
+    "name": "Josh Holtz",
+    "url": "https://github.com/joshdholtz"
+  },
+  "plugins": [
+    {
+      "name": "respond-clearly",
+      "description": "Answer first, literal wording, exact state, no surprises. Personalize it with your own profile.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
