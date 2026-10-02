@@ -1,0 +1,52 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Source for social-preview.png (1280x640). Regenerate with headless Chrome:
+     "Google Chrome" --headless --hide-scrollbars --window-size=1280,640 --screenshot=social-preview.png social-preview.html -->
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1280px; height: 640px; overflow: hidden; }
+  body { background: #F6F4EF; color: #1F2328; font-family: -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+         padding: 40px 56px 48px; display: flex; flex-direction: column; gap: 20px; }
+  h1 { font-size: 52px; font-weight: 750; letter-spacing: -1px; }
+  .sub { font-size: 25px; color: #57606A; margin-top: 6px; }
+  .cards { display: flex; gap: 22px; align-items: stretch; flex: 1; }
+  .card { flex: 1; border-radius: 18px; padding: 24px 28px; }
+  .before { background: #ECE9E2; }
+  .after { background: #FFFFFF; border: 2px solid #0B7A5C; }
+  .label { font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+  .before .label { color: #8C959F; }
+  .after .label { color: #0B7A5C; }
+  .before p { font-size: 19px; line-height: 1.6; color: #6E7781; }
+  .after div.l { font-size: 19px; line-height: 1.5; }
+  .after .h { font-weight: 700; margin-top: 8px; }
+  .after .top { font-weight: 700; font-size: 21px; }
+  .after .state { color: #57606A; }
+  .arrow { align-self: center; font-size: 40px; color: #8C959F; }
+  .foot { font-size: 18px; color: #57606A; display: flex; justify-content: space-between; }
+</style></head>
+<body>
+  <div>
+    <h1>respond-clearly</h1>
+    <div class="sub">Replies for readers with ADHD, autism, or both. A skill for Claude Code and Codex.</div>
+  </div>
+  <div class="cards">
+    <div class="card before">
+      <div class="label">A typical reply</div>
+      <p>Great question! I took a look at everything and there are a few things going on. The search PR is mostly ready, although CI is still running and might take about 20 more minutes. You might also want to look at the snapshot tests at some point, and there's a debug line I added that we should probably clean up soon. The filter chips one should be good to go I think, since it got an approval, so that part is probably fine whenever you get to it. Hope this helps, let me know if you have any questions! 😊</p>
+    </div>
+    <div class="arrow">→</div>
+    <div class="card after">
+      <div class="label">With respond-clearly</div>
+      <div class="l top">2 things need you.</div>
+      <div class="l state">State: nothing pushed or posted.</div>
+      <div class="l h">✅ Done</div>
+      <div class="l">1. Filter chips PR: green, approved, ready to merge.</div>
+      <div class="l h">🔜 In progress</div>
+      <div class="l">2. Scroll sync PR: CI started 6 minutes ago.</div>
+      <div class="l h">👉 Needs you</div>
+      <div class="l">3. 2 new snapshot baselines are waiting on your approval.</div>
+      <div class="l">4. Remove my debug line from search-local? Yes (recommended) or no.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Answer first · literal wording · exact state · no surprises · no pressure</span><span>github.com/joshdholtz/respond-clearly</span></div>
+</body></html>

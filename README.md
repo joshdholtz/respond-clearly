@@ -1,5 +1,7 @@
 # respond-clearly
 
+![Before and after. A typical reply is one long paragraph with filler, hedges, a time estimate, and an emoji. The same reply with respond-clearly starts with "2 things need you.", then a State line, then Done, In progress, and Needs you sections with numbered items.](assets/social-preview.png)
+
 A skill for Claude Code and Codex that shapes replies for readers with ADHD, autism, or both.
 
 Most "ADHD mode" skills make answers shorter. This one also covers what many autistic readers want: literal wording, exact numbers and state, no surprises, and the same shape every time. A profile file lets you add your own preferences on top.
