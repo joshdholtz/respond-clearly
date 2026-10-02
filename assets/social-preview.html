@@ -1,52 +1,51 @@
-<!doctype html>
-<html><head><meta charset="utf-8">
+<!doctype html><html><head><meta charset="utf-8">
 <!-- Source for social-preview.png (1280x640). Regenerate with headless Chrome:
      "Google Chrome" --headless --hide-scrollbars --window-size=1280,640 --screenshot=social-preview.png social-preview.html -->
 <style>
-  * { box-sizing: border-box; margin: 0; }
-  html, body { width: 1280px; height: 640px; overflow: hidden; }
-  body { background: #F6F4EF; color: #1F2328; font-family: -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-         padding: 40px 56px 48px; display: flex; flex-direction: column; gap: 20px; }
-  h1 { font-size: 52px; font-weight: 750; letter-spacing: -1px; }
-  .sub { font-size: 25px; color: #57606A; margin-top: 6px; }
-  .cards { display: flex; gap: 22px; align-items: stretch; flex: 1; }
-  .card { flex: 1; border-radius: 18px; padding: 24px 28px; }
-  .before { background: #ECE9E2; }
-  .after { background: #FFFFFF; border: 2px solid #0B7A5C; }
-  .label { font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
-  .before .label { color: #8C959F; }
-  .after .label { color: #0B7A5C; }
-  .before p { font-size: 19px; line-height: 1.6; color: #6E7781; }
-  .after div.l { font-size: 19px; line-height: 1.5; }
-  .after .h { font-weight: 700; margin-top: 8px; }
-  .after .top { font-weight: 700; font-size: 21px; }
-  .after .state { color: #57606A; }
-  .arrow { align-self: center; font-size: 40px; color: #8C959F; }
-  .foot { font-size: 18px; color: #57606A; display: flex; justify-content: space-between; }
-</style></head>
-<body>
-  <div>
-    <h1>respond-clearly</h1>
-    <div class="sub">Replies for readers with ADHD, autism, or both. A skill for Claude Code and Codex.</div>
-  </div>
-  <div class="cards">
-    <div class="card before">
-      <div class="label">A typical reply</div>
-      <p>Great question! I took a look at everything and there are a few things going on. The search PR is mostly ready, although CI is still running and might take about 20 more minutes. You might also want to look at the snapshot tests at some point, and there's a debug line I added that we should probably clean up soon. The filter chips one should be good to go I think, since it got an approval, so that part is probably fine whenever you get to it. Hope this helps, let me know if you have any questions! 😊</p>
-    </div>
-    <div class="arrow">→</div>
-    <div class="card after">
-      <div class="label">With respond-clearly</div>
-      <div class="l top">2 things need you.</div>
-      <div class="l state">State: nothing pushed or posted.</div>
-      <div class="l h">✅ Done</div>
-      <div class="l">1. Filter chips PR: green, approved, ready to merge.</div>
-      <div class="l h">🔜 In progress</div>
-      <div class="l">2. Scroll sync PR: CI started 6 minutes ago.</div>
-      <div class="l h">👉 Needs you</div>
-      <div class="l">3. 2 new snapshot baselines are waiting on your approval.</div>
-      <div class="l">4. Remove my debug line from search-local? Yes (recommended) or no.</div>
-    </div>
-  </div>
-  <div class="foot"><span>Answer first · literal wording · exact state · no surprises · no pressure</span><span>github.com/joshdholtz/respond-clearly</span></div>
-</body></html>
+* { box-sizing: border-box; margin: 0; } html, body { width: 1280px; height: 640px; overflow: hidden; }
+.bar { display:block; height: 13px; border-radius: 7px; }
+.row { display:flex; align-items:center; gap: 16px; height: 46px; }
+.row .bar { height: 16px; border-radius: 8px; }
+.e { font-size: 30px; width: 40px; text-align:center; }
+.wall { display:flex; flex-direction:column; gap: 11px; }
+
+body { background: radial-gradient(1100px 600px at 15% -10%, #233B6E 0%, #0D1117 62%); color:#E6EDF3; font-family:-apple-system, sans-serif; padding: 38px 64px 34px; display:flex; flex-direction:column; gap: 26px; }
+h1 { font-family: "SF Mono", Menlo, monospace; font-size: 66px; font-weight: 800; line-height:1; background: linear-gradient(90deg,#7EE787,#79C0FF 55%,#D2A8FF); -webkit-background-clip:text; color:transparent; }
+.sub { font-size: 27px; color:#9DA7B3; margin-top: 12px; }
+.cards { display:flex; gap: 22px; height: 360px; flex: none; }
+.card { flex:1; background:#161B22; border:1px solid #30363D; border-radius:16px; padding: 50px 30px 20px; position:relative; overflow:hidden; }
+.card::before { content:""; position:absolute; left:0; right:0; top:0; height:38px; background:#21262D; }
+.card::after { content:"● ● ●"; position:absolute; left:16px; top:8px; font-size:15px; letter-spacing:3px; color:#6E7681; }
+.sticker { position:absolute; top:9px; right:18px; z-index:1; font-family: Menlo, monospace; font-size: 15px; font-weight:700; letter-spacing: 2px; }
+.before .sticker { color:#FF7B72; } .after .sticker { color:#7EE787; }
+.before .bar { background:#30363D; } .after .bar { background:#3D444D; } .after .bar.strong { background:#7EE787; height: 22px; }
+.after { border-color:#2EA043; box-shadow: 0 0 0 1px #2EA043, 0 0 50px rgba(46,160,67,.3); }
+.rows { display:flex; flex-direction:column; gap: 6px; }
+.arrow { align-self:center; font-size: 50px; color:#6E7681; }
+.foot { text-align:right; font-family: Menlo, monospace; font-size: 18px; color:#8B949E; }
+
+.xmark { position:absolute; left:22px; right:22px; top:50px; bottom:16px; width:calc(100% - 44px); height:calc(100% - 66px); filter: drop-shadow(0 0 8px rgba(255,92,92,.75)); z-index: 2; }
+.row { height: 36px; }
+.t { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; border: 1px solid #30363D; border-radius: 10px; overflow: hidden; }
+.t th, .t td { padding: 9px 12px; border-bottom: 1px solid #30363D; }
+.t tr:last-child td { border-bottom: none; }
+.t th { background: #21262D; }
+.t .bar { height: 11px; border-radius: 6px; }
+.t .hb { background: #79C0FF !important; opacity: .8; }
+.t .ok { color: #7EE787; font-weight: 800; font-size: 18px; width: 50px; text-align: center; }
+.after .e { background: #E6EDF3; border-radius: 10px; width: 44px; height: 36px; display:flex; align-items:center; justify-content:center; font-size: 26px; box-shadow: 0 0 0 1px #8B949E inset; }
+</style></head><body><div class="head"><h1>respond-clearly</h1><div class="sub">AI replies for ADHD and autistic brains.</div></div>
+<div class="cards"><div class="card before"><div class="sticker">BEFORE</div><svg class="xmark" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M4 6 L96 94 M96 6 L4 94" stroke="#FF5C5C" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg><div class="wall"><i class="bar" style="width:89%"></i><i class="bar" style="width:86%"></i><i class="bar" style="width:87%"></i><i class="bar" style="width:92%"></i><i class="bar" style="width:92%"></i><i class="bar" style="width:87%"></i><i class="bar" style="width:89%"></i><i class="bar" style="width:87%"></i><i class="bar" style="width:94%"></i><i class="bar" style="width:92%"></i><i class="bar" style="width:86%"></i><i class="bar" style="width:99%"></i><i class="bar" style="width:95%"></i><i class="bar" style="width:87%"></i><i class="bar" style="width:58%"></i></div></div>
+<div class="arrow">→</div>
+<div class="card after"><div class="sticker">AFTER</div><div class="rows">
+<div class="row"><b class="bar strong" style="width:58%"></b></div>
+<div class="row"><span class="e">✅</span><i class="bar" style="width:62%"></i></div>
+<div class="row"><span class="e">🔜</span><i class="bar" style="width:48%"></i></div>
+<div class="row"><span class="e">👉</span><i class="bar" style="width:56%"></i></div>
+<table class="t">
+<tr><th><i class="bar hb" style="width:70%"></i></th><th><i class="bar hb" style="width:55%"></i></th><th><i class="bar hb" style="width:60%"></i></th></tr>
+<tr><td><i class="bar" style="width:80%"></i></td><td><i class="bar" style="width:50%"></i></td><td class="ok">✓</td></tr>
+<tr><td><i class="bar" style="width:65%"></i></td><td><i class="bar" style="width:70%"></i></td><td class="ok">✓</td></tr>
+</table>
+</div></div></div>
+<div class="foot">github.com/joshdholtz/respond-clearly</div></body></html>

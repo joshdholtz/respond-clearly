@@ -1,6 +1,6 @@
 # respond-clearly
 
-![Before and after. A typical reply is one long paragraph with filler, hedges, a time estimate, and an emoji. The same reply with respond-clearly starts with "2 things need you.", then a State line, then Done, In progress, and Needs you sections with numbered items.](assets/social-preview.png)
+![Before and after. Before: a terminal window full of a dense wall of text, crossed out with a red X. After: a terminal window with one bold answer line, then rows marked with the status emoji for done, in progress, and needs you, then a small table with check marks.](assets/social-preview.png)
 
 A skill for Claude Code and Codex that shapes replies for readers with ADHD, autism, or both.
 
